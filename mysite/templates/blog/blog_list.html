@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+
+{% load staticfiles %}
+
+
+{% block title %}
+博客首页
+{% endblock %}
+
+{% block nav_blog_active %}
+    active
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+        <div class="row">
+
+            <div class="col-sm-8 col-md-8">
+                <div class="panel panel-default">
+                <div class="panel-heading">博客列表----------共有{{ blogs_count }}篇博客</div>
+                <div class="panel-body">
+                {% for blog in blogs %}
+                    <a href="{% url 'blog.detail' blog.id %}"><h3>标题:{{ blog.title }}</h3></a>
+                    <p>文章内容:{{ blog.content|striptags|truncatechars:30 }}</p>
+                    <p><a href="{% url 'blogs_with_type' blog.blog_type.id %}"><span class="label label-primary">{{ blog.blog_type.type_name }}</span></a></p>
+                    <p>发表时间:{{ blog.create_time }}</p>
+                    <p>阅读({{ blog.readed_num }})</p>
+                    <br><br>
+                    {% empty %}
+                    <p>---暂无博客 敬请期待---</p>
+                {% endfor %}
+
+                <div aria-label="Page navigation">
+                      <ul class="pagination">
+                        <li>
+                            {% if page_of_blogs.has_previous %}
+                                <a href="?page={{ page_of_blogs.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+
+                            {% else %}
+                                <span aria-hidden="true">&laquo;</span>
+                            {% endif %}
+
+                        </li>
+
+                        {% for page_num in page_range %}
+                            {% if page_num == page_of_blogs.number %}
+                                <li class="active"><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+                            {% else %}
+                                <li><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+
+                        <li>
+                            {% if page_of_blogs.has_next %}
+                            <a href="?page={{ page_of_blogs.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                            {% else %}
+                                <span aria-hidden="true">&raquo;</span>
+                            {% endif %}
+                        </li>
+                      </ul>
+                    </div>
+            </div>
+            </div>
+            </div>
+
+<div class="col-sm-4 col-md-4 col-lg-2">
+    <div class="panel panel-default">
+        <div class="panel-heading">博客分类</div>
+        <div class="panel-body">
+            <ul style="list-style-type: none;padding-inline-start: 0px;">
+                {% for blog_type in blog_types %}
+                    <li>
+                        <a href="{% url 'blogs_with_type' blog_type.id %}">
+                            {{ blog_type.type_name }}({{ blog_type.blog_count }})
+                        </a>
+                        {% empty %}
+                        <li>暂无博客</li>
+                    </li>
+
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">日期分类</div>
+        <div class="panel-body">
+            <ul style="list-style-type: none;padding-inline-start: 0px;">
+                {% for blog_date,blog_count in blog_dates.items %}
+                    <li>
+                        <a href="{% url 'blogs_with_dates' blog_date.year blog_date.month  %}">
+                            {{ blog_date|date:'Y年m月' }}({{ blog_count }})
+                        </a>
+                    </li>
+                    {% empty %}
+                        <li>暂无博客</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+验证错误页面
+{% endblock %}
+
+{% block content %}
+    {{ msg }},<a href="{{ redirect }}">返回上页</a>
+{% endblock %}
