@@ -1,3 +1,2 @@
-# Dexxxes's blog
-
+# Dexxxes's blog (python,django)
 
